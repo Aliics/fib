@@ -37,17 +37,17 @@ compute label x = do
   n <- x `deepseq` getCurrentTime
   putStrLn $ mconcat ["\"", label, "\" ", "time taken: ", show $ diffUTCTime n s]
 
+-- Generic fib application.
+fib :: (Int -> Integer) -> Int -> Integer
+fib _ 0 = 1
+fib _ 1 = 1
+fib f n = f (n - 1) + f (n - 2)
+
 fibNaive :: Int -> Integer
-fibNaive 0 = 1
-fibNaive 1 = 1
-fibNaive n = fibNaive (n - 1) + fibNaive (n - 2)
+fibNaive = fib fibNaive
 
 fibMemoList :: Int -> Integer
-fibMemoList = (map f [0 ..] !!)
- where
-  f 0 = 1
-  f 1 = 1
-  f n = fibMemoList (n - 1) + fibMemoList (n - 2)
+fibMemoList = (map (fib fibMemoList) [0 ..] !!)
 
 fibMemoArr :: Int -> Integer
 fibMemoArr n =
@@ -55,8 +55,4 @@ fibMemoArr n =
  where
   max = n
 
-  fibArr = (fmap f (A.listArray (0, max) [0 ..]) A.!)
-
-  f 0 = 1
-  f 1 = 1
-  f n = fibArr (n - 1) + fibArr (n - 2)
+  fibArr = (fmap (fib fibArr) (A.listArray (0, max) [0 ..]) A.!)
