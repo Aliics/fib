@@ -41,4 +41,4 @@ to an implement with an array
 (fmap f (A.listArray (0, max) [0 ..]) A.!)
 ```
 
-in normally pretty simple.
+is normally pretty simple.
